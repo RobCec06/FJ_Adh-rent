@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adhérents La Forge Je'Daii - Droit à l'image</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0d0d0d;
+            color: #f5f5f5;
+            background-image: url('https://www.solarsystemscope.com/textures/download/2k_stars_milky_way.jpg');
+            background-size: cover;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Noto Sans JP', sans-serif;
+            letter-spacing: 2px;
+            font-size: 32px;
+            color: #f5f5f5;
+            text-shadow: 0 0 5px #ff9900, 0 0 10px #ff9900;
+        }
+        table {
+            width: 80%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff9900;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #555;
+        }
+        th {
+            background-color: #222;
+            color: #fff;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 18px;
+            text-shadow: 0 0 5px #ff9900;
+        }
+        td {
+            background-color: rgba(30, 30, 30, 0.9);
+            font-family: 'Noto Sans JP', sans-serif;
+            color: #fff;
+        }
+        .status-cell {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid #ff9900;
+            background-color: #444;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input[type="radio"]:checked, input[type="checkbox"]:checked {
+            background-color: #ff9900;
+            box-shadow: 0 0 10px #ff9900;
+        }
+        input[type="radio"]::before, input[type="checkbox"]::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            margin: 7px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        input[type="radio"]:checked::before, input[type="checkbox"]:checked::before {
+            opacity: 1;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #ff9900;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff9900;
+            box-shadow: 0 0 10px #ff9900;
+        }
+        .form-container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .form-container input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ff9900;
+            background-color: #222;
+            color: white;
+        }
+        #message {
+            display: none;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-shadow: 0 0 5px #ff9900;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
+        }
+        .search-container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .search-container input {
+            width: 200px;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ff9900;
+            background-color: #222;
+            color: white;
+        }
+        .search-container select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ff9900;
+            background-color: #222;
+            color: white;
+        }
+        </style>
+</head>
+<body>
+    
+    <h1>Adhérents La Forge Je'Daii</h1>
+    <img src="logo_japan_forge.png" alt="Logo Forge Je'Daii">
+
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <input type="text" id="searchName" placeholder="Rechercher par nom ou prénom">
+            <select id="filterStatus">
+                <option value="">Filtrer par droit à l'image</option>
+                <option value="approuve">Approuvé</option>
+                <option value="en_attente">En Attente</option>
+                <option value="refuse">Refusé</option>
+            </select>
+            <select id="filterInscription">
+                <option value="">Filtrer par inscription</option>
+                <option value="true">Inscrit</option>
+                <option value="false">Non inscrit</option>
+            </select>
+            <button onclick="filterTable()">Rechercher</button>
+            <button onclick="resetFilters()">Réinitialiser</button>
+        </div>
+
+
+    <div class="form-container">
+        <input type="text" id="nom" placeholder="Nom">
+        <input type="text" id="prenom" placeholder="Prénom">
+        <button onclick="addMember()">Ajouter Adhérent</button>
+    </div>
+    
+    <table id="adherentTable">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Inscrit à l'association</th>
+                <th>Status du Droit à l'image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be added dynamically with JavaScript -->
+        </tbody>
+    </table>
+    
+
+    <div style="text-align: center;">
+        <button onclick="saveData()">Sauvegarder les statuts</button>
+    </div>
+
+    <div id="message">Les statuts des droits à l'image ont été sauvegardés.</div>
+
+    <script>
+        let adherents = [
+            {nom: "Skywalker", prenom: "Luke", inscrit: true, status: "en_attente"},
+            {nom: "Kenobi", prenom: "Obi-Wan", inscrit: false, status: "en_attente"},
+            {nom: "Solo", prenom: "Han", inscrit: true, status: "en_attente"},
+            {nom: "Organa", prenom: "Leia", inscrit: true, status: "en_attente"},
+        ];
+
+        // Load saved data from localStorage
+// Load saved data from localStorage with error handling
+function loadData() {
+    try {
+        const savedData = JSON.parse(localStorage.getItem('adherentData'));
+        if (savedData && Array.isArray(savedData)) {
+            adherents = savedData;
+        } else {
+            console.warn("Aucune donnée trouvée dans localStorage ou format incorrect.");
+        }
+    } catch (error) {
+        console.error("Erreur lors du chargement des données de localStorage:", error);
+    }
+    renderTable();
+}
+
+// Save the data to localStorage with error handling
+function saveData() {
+    try {
+        localStorage.setItem('adherentData', JSON.stringify(adherents));
+        // Afficher le message de confirmation
+        const messageDiv = document.getElementById('message');
+        messageDiv.style.display = 'block';
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 3000);
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement des données dans localStorage:", error);
+    }
+}
+
+
+        // Render the table
+        function renderTable(filteredAdherents = adherents) {
+            const tbody = document.querySelector('#adherentTable tbody');
+            tbody.innerHTML = ''; // Clear the table
+            filteredAdherents.forEach((adherent, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${adherent.nom}</td>
+                    <td>${adherent.prenom}</td>
+                    <td><input type="checkbox" ${adherent.inscrit ? 'checked' : ''} onchange="toggleInscription(${index})"></td>
+                    <td class="status-cell">
+                        <label>Approuvé
+                            <input type="radio" name="status-${index}" ${adherent.status === 'approuve' ? 'checked' : ''} onchange="setStatus(${index}, 'approuve')">
+                        </label>
+                        <label>En Attente
+                            <input type="radio" name="status -${index}" ${adherent.status === 'en_attente' ? 'checked' : ''} onchange="setStatus(${index}, 'en_attente')">
+                        </label>
+                        <label>Refusé
+                            <input type="radio" name="status-${index}" ${adherent.status === 'refuse' ? 'checked' : ''} onchange="setStatus(${index}, 'refuse')">
+                        </label>
+                    </td>
+                    <td>
+                        <button onclick="removeMember(${index})">Supprimer</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Toggle inscription status
+        function toggleInscription(index) {
+            adherents[index].inscrit = !adherents[index].inscrit;
+            saveData();
+        }
+
+        // Set the status of the member
+        function setStatus(index, status) {
+            adherents[index].status = status;
+            saveData();
+        }
+
+        // Add a new member
+        function addMember() {
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
+
+            if (nom && prenom) {
+                adherents.push({ nom, prenom, inscrit: false, status: 'en_attente' });
+                renderTable();
+                saveData();
+                document.getElementById('nom').value = '';
+                document.getElementById('prenom').value = '';
+            } else {
+                alert("Veuillez remplir tous les champs");
+            }
+        }
+
+        // Remove a member
+        function removeMember(index) {
+            adherents.splice(index, 1);
+            renderTable();
+            saveData();
+        }
+
+        // Save the data to localStorage
+        function saveData() {
+            localStorage.setItem('adherentData', JSON.stringify(adherents));
+            // Show the saved message and hide it after 3 seconds
+            const messageDiv = document.getElementById('message');
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Filter the table based on search input and filters
+        function filterTable() {
+            const searchValue = document.getElementById('searchName').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+            const filterInscription = document.getElementById('filterInscription').value;
+
+            const filteredAdherents = adherents.filter(adherent => {
+                const matchesName = adherent.nom.toLowerCase().includes(searchValue) || adherent.prenom.toLowerCase().includes(searchValue);
+                const matchesStatus = filterStatus ? adherent.status === filterStatus : true;
+                const matchesInscription = filterInscription ? adherent.inscrit.toString() === filterInscription : true;
+                return matchesName && matchesStatus && matchesInscription;
+            });
+
+            renderTable(filteredAdherents);
+        }
+
+        // Reset the filters and show all data
+        function resetFilters() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterInscription').value = '';
+            renderTable(adherents);
+        }
+        if (typeof(Storage) !== "undefined") {
+    console.log("localStorage est disponible.");
+} else {
+    console.log("localStorage n'est pas disponible.");
+}
+
+        // Load data when the page loads
+        window.onload = loadData;
+    </script>
+
+</body>
+</html>
